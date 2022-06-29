@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.dw.composition.R
 import ru.dw.composition.databinding.FragmentChooseLevelBinding
+import ru.dw.composition.domain.entity.Level
 
 
 class ChooseLevelFragment : Fragment() {
@@ -19,12 +20,48 @@ class ChooseLevelFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentChooseLevelBinding.inflate(inflater,container,false)
+        _binding = FragmentChooseLevelBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        choseGame()
+    }
+
+    private fun choseGame() {
+        with(binding) {
+            buttonLevelTest.setOnClickListener {
+                launchGameLevelFragment(Level.TEST)
+            }
+            buttonLevelEasy.setOnClickListener {
+                launchGameLevelFragment(Level.EASY)
+            }
+            buttonLevelNormal.setOnClickListener {
+                launchGameLevelFragment(Level.NORMAL)
+            }
+            buttonLevelHard.setOnClickListener {
+                launchGameLevelFragment(Level.HARD)
+            }
+        }
+    }
+
+    private fun launchGameLevelFragment(level: Level) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, GameFragment.newInstance(level))
+            .addToBackStack(GameFragment.NAME)
+            .commit()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        const val NAME = "ChooseLevelFragment"
+        fun newInstance(): ChooseLevelFragment {
+            return ChooseLevelFragment()
+        }
     }
 }

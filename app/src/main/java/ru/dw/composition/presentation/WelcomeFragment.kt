@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.dw.composition.R
-import ru.dw.composition.databinding.FragmentGameBinding
 import ru.dw.composition.databinding.FragmentWelcomeBinding
-import java.lang.RuntimeException
 
 
 class WelcomeFragment : Fragment() {
-    private  var _binding: FragmentWelcomeBinding? = null
-    private val binding : FragmentWelcomeBinding
-    get() = _binding ?: throw RuntimeException("FragmentWelcomeBinding == null")
+    private var _binding: FragmentWelcomeBinding? = null
+    private val binding: FragmentWelcomeBinding
+        get() = _binding ?: throw RuntimeException("FragmentWelcomeBinding == null")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,13 +31,9 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    private fun launchChooseLevelFragment(){
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container,ChooseLevelFragment.newInstance())
-            .addToBackStack(ChooseLevelFragment.NAME)
-            .commit()
+    private fun launchChooseLevelFragment() {
+        findNavController().navigate(R.id.action_welcomeFragment_to_chooseLevelFragment2)
     }
-
 
 
     override fun onDestroy() {

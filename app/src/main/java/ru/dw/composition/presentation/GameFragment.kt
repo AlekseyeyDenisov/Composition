@@ -13,15 +13,17 @@ import ru.dw.composition.R
 import ru.dw.composition.databinding.FragmentGameBinding
 import ru.dw.composition.domain.entity.GameResult
 import ru.dw.composition.domain.entity.Level
+import ru.dw.composition.presentation.viewmodel.GameViewModel
+import ru.dw.composition.presentation.viewmodel.GameViewModelFactory
 
 
 class GameFragment : Fragment() {
     private lateinit var level: Level
+    private val viewModelFactory by lazy {
+        GameViewModelFactory(level, requireActivity().application)
+    }
     private val viewModel: GameViewModel by lazy {
-        ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[GameViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
     }
     private var _binding: FragmentGameBinding? = null
     private val binding: FragmentGameBinding
@@ -55,13 +57,13 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         setClickListenerToOptions()
-        viewModel.startGame(level)
 
     }
-    private fun setClickListenerToOptions(){
-        for (tvOption in tvOptions){
+
+    private fun setClickListenerToOptions() {
+        for (tvOption in tvOptions) {
             tvOption.setOnClickListener {
-             viewModel.chooseAnswer(tvOption.text.toString().toInt())
+                viewModel.chooseAnswer(tvOption.text.toString().toInt())
             }
         }
     }
@@ -94,7 +96,7 @@ class GameFragment : Fragment() {
         viewModel.gameResult.observe(viewLifecycleOwner) {
             launchGameFinishedFragment(it)
         }
-        viewModel.progressAnswers.observe(viewLifecycleOwner){
+        viewModel.progressAnswers.observe(viewLifecycleOwner) {
             binding.tvAnswersProgress.text = it
         }
     }

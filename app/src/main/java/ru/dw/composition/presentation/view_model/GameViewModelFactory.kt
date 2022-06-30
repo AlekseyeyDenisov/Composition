@@ -1,4 +1,4 @@
-package ru.dw.composition.presentation.viewmodel
+package ru.dw.composition.presentation.view_model
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
